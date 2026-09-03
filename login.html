@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواصيل | فوت ع حسابك</title>
+    
+    <link rel="preload" as="image" href="https://i.ibb.co/678mybGy/image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* =========================================================
+           1. CORE TOKENS
+        ========================================================= */
+        :root {
+            --brand: #FF4500; 
+            --brand-glow: rgba(255, 69, 0, 0.25);
+            --bg-main: #F4F3ED; 
+            --bg-alt: #FFFFFF;
+            --text-dark: #0A0A0B;
+            --text-muted: #666666;
+            --line-color: rgba(10, 10, 11, 0.1);
+            --font-stack: 'Cairo', sans-serif;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.dark {
+            --bg-main: #0C0C0C; --bg-alt: #161616;
+            --text-dark: #F5F5F5; --text-muted: #888888;
+            --line-color: rgba(245, 245, 245, 0.1);
+            --brand: #FF5722; --brand-glow: rgba(255, 87, 34, 0.15);
+        }
+
+        /* =========================================================
+           2. RESET & TEXTURE
+        ========================================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-stack); background-color: var(--bg-main); color: var(--text-dark);
+            overflow-x: hidden; line-height: 1.5; transition: 0.5s var(--ease-out);
+        }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04; z-index: 9999; pointer-events: none; mix-blend-mode: multiply;
+        }
+        body.dark::before { opacity: 0.03; mix-blend-mode: screen; }
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+
+        /* =========================================================
+           3. AUTH LAYOUT (Split Screen)
+        ========================================================= */
+        .auth-layout { display: flex; min-height: 100vh; }
+
+        .auth-form-side {
+            flex: 1; display: flex; flex-direction: column; padding: 40px 4vw;
+            position: relative; z-index: 2; background: var(--bg-main);
+            overflow-y: auto;
+        }
+
+        .auth-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 60px; }
+        .brand-logo img { height: clamp(32px, 5vw, 40px); display: block; }
+        .back-link { font-weight: 700; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-link:hover { color: var(--brand); transform: translateX(-5px); }
+
+        .auth-box { width: 100%; max-width: 440px; margin: 0 auto auto auto; }
+        .auth-title { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .auth-subtitle { font-size: 1.05rem; color: var(--text-muted); font-weight: 500; margin-bottom: 40px; }
+
+        /* Left Side: Visual Area */
+        .auth-visual-side {
+            flex: 1.2; background: var(--text-dark); color: var(--bg-main); padding: 40px 4vw;
+            display: flex; flex-direction: column; justify-content: center; position: relative;
+            overflow: hidden; border-right: 1px solid var(--line-color);
+        }
+        .visual-typography { font-size: clamp(4rem, 8vw, 8rem); font-weight: 900; line-height: 0.9; letter-spacing: -3px; position: relative; z-index: 2; }
+        .visual-typography .brand-text { color: var(--brand); }
+        .visual-typography .light { font-weight: 500; }
+        .visual-abstract { position: absolute; left: -10%; top: -10%; font-size: 40vw; line-height: 1; font-weight: 900; color: var(--bg-main); opacity: 0.03; pointer-events: none; }
+
+        /* =========================================================
+           4. FORM COMPONENTS
+        ========================================================= */
+        .social-login { display: flex; gap: 16px; margin-bottom: 32px; }
+        .btn-social {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px; border-radius: 12px; border: 1px solid var(--line-color); background: var(--bg-alt);
+            font-weight: 700; font-size: 0.95rem; color: var(--text-dark); transition: 0.3s var(--ease-out);
+        }
+        .btn-social:hover { border-color: var(--text-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        body.dark .btn-social:hover { box-shadow: 0 5px 15px rgba(255,255,255,0.05); }
+
+        .divider { display: flex; align-items: center; text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 700; margin-bottom: 32px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--line-color); }
+        .divider:not(:empty)::before { margin-left: 16px; }
+        .divider:not(:empty)::after { margin-right: 16px; }
+
+        .input-group { margin-bottom: 24px; }
+        .input-label { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; color: var(--text-dark); }
+        .form-control {
+            width: 100%; padding: 14px 16px; background: var(--bg-alt); border: 1px solid var(--line-color);
+            border-radius: 12px; font-family: var(--font-stack); font-size: 1rem; color: var(--text-dark);
+            font-weight: 600; transition: 0.3s;
+        }
+        .form-control:focus { border-color: var(--brand); outline: none; box-shadow: 0 0 0 4px var(--brand-glow); }
+        .form-control::placeholder { color: var(--text-muted); opacity: 0.6; font-weight: 500; }
+        select.form-control { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 16px center; background-size: 16px; }
+
+        .btn-submit {
+            width: 100%; padding: 18px; background: var(--text-dark); color: var(--bg-main);
+            border-radius: 100px; font-weight: 900; font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin-top: 32px; transition: 0.3s var(--ease-out);
+        }
+        body.dark .btn-submit { background: #FFFFFF; color: #000000; }
+        .btn-submit:hover { background: var(--brand); color: #FFFFFF; transform: translateY(-2px); box-shadow: 0 10px 25px var(--brand-glow); }
+
+        .auth-switch { text-align: center; margin-top: 32px; font-weight: 600; color: var(--text-muted); margin-bottom: 40px;}
+        .auth-switch a { color: var(--text-dark); font-weight: 800; margin-right: 4px; border-bottom: 2px solid var(--brand); padding-bottom: 2px; transition: 0.3s; }
+        .auth-switch a:hover { color: var(--brand); }
+
+        /* Profile Pic Upload Styling */
+        .profile-pic-wrapper { display: flex; justify-content: center; margin-bottom: 32px; position: relative;}
+        .profile-pic {
+            width: 110px; height: 110px; border-radius: 50%;
+            background-color: var(--bg-alt); border: 2px dashed var(--line-color);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; overflow: hidden; position: relative;
+            background-size: cover; background-position: center; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+        .profile-pic:hover { border-color: var(--brand); }
+        .profile-pic i { font-size: 2rem; color: var(--text-muted); transition: 0.3s; }
+        .profile-pic:hover i { color: var(--brand); transform: scale(1.1); }
+        .pic-hint { position: absolute; bottom: -24px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+
+        .auth-view { display: none; }
+        .auth-view.active { display: block; animation: fadeUp 0.5s var(--ease-out) forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 992px) {
+            .auth-visual-side { display: none; }
+            .auth-form-side { padding: 24px 5%; }
+            .auth-header { margin-bottom: 40px; }
+        }
+        @media (max-width: 480px) {
+            .social-login { flex-direction: column; gap: 12px; }
+            .auth-title { font-size: 2.2rem; }
+            .form-row { flex-direction: column; gap: 0 !important; }
+        }
+        
+        .form-row { display: flex; gap: 16px; }
+        .form-row .input-group { flex: 1; }
+    </style>
+</head>
+<body>
+
+    <main class="auth-layout">
+        
+        <!-- RIGHT SIDE: FORM -->
+        <div class="auth-form-side">
+            <header class="auth-header">
+                <a href="index.html" class="brand-logo">
+                    <img src="https://i.ibb.co/678mybGy/image.png" alt="مواصيل">
+                </a>
+                <a href="index.html" class="back-link">الرئيسية <i class="fa-solid fa-arrow-left"></i></a>
+            </header>
+
+            <div class="auth-box">
+                
+                <!-- ==============================================
+                     1. LOGIN VIEW
+                =============================================== -->
+                <div id="login-view" class="auth-view active">
+                    <h1 class="auth-title">أهلاً بشريكنا.</h1>
+                    <p class="auth-subtitle">فوت ع حسابك وتابع أرباحك أول بأول.</p>
+
+                    <div class="social-login">
+                        <button type="button" class="btn-social" id="google-login-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                            كمّل مع جوجل
+                        </button>
+                        
+                        <!-- زر فيسبوك تم إرجاعه هنا -->
+                        <button type="button" class="btn-social" onclick="alert('رح نفعل فيسبوك بس نربطه من حساب المطورين')">
+                            <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 1.25rem;"></i>
+                            كمّل مع فيسبوك
+                        </button>
+                    </div>
+
+                    <div class="divider">أو باستخدام الإيميل</div>
+
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label class="input-label">الإيميل تبعك</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">كلمة السر</label>
+                            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn-submit" id="login-btn-text">فوت ع حسابك <i class="fa-solid fa-arrow-left"></i></button>
+                    </form>
+
+                    <div class="auth-switch">
+                        ما عندك حساب؟ <a href="#" onclick="toggleAuthView(event, 'register-view')">بلّش شراكتك هسا</a>
+                    </div>
+                </div>
+
+                <!-- ==============================================
+                     2. REGISTER VIEW (Step 1)
+                =============================================== -->
+                <div id="register-view" class="auth-view">
+                    <h1 class="auth-title">خلينا نكبرها سوا.</h1>
+                    <p class="auth-subtitle">بلّش خطوتك الأولى وادخل عالم الأرباح.</p>
+
+                    <div class="social-login">
+                        <button type="button" class="btn-social" id="google-register-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                            سجّل مع جوجل
+                        </button>
+                        
+                        <!-- زر فيسبوك تم إرجاعه هنا -->
+                        <button type="button" class="btn-social" onclick="alert('رح نفعل فيسبوك بس نربطه من حساب المطورين')">
+                            <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 1.25rem;"></i>
+                            سجّل مع فيسبوك
+                        </button>
+                    </div>
+
+                    <div class="divider">أو سجل بالإيميل</div>
+
+                    <form id="register-form">
+                        <div class="input-group">
+                            <label class="input-label">الإيميل</label>
+                            <input type="email" id="register-email" class="form-control" placeholder="name@example.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">كلمة السر</label>
+                            <input type="password" id="register-password" class="form-control" placeholder="أقل شي 6 أحرف" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn-submit" id="register-btn-text">الخطوة التالية <i class="fa-solid fa-arrow-left"></i></button>
+                    </form>
+
+                    <div class="auth-switch">
+                        عندك حساب أصلاً؟ <a href="#" onclick="toggleAuthView(event, 'login-view')">فوت ع حسابك</a>
+                    </div>
+                </div>
+
+                <!-- ==============================================
+                     3. COMPLETE PROFILE VIEW (Step 2)
+                =============================================== -->
+                <div id="profile-view" class="auth-view">
+                    <h1 class="auth-title">كمّل بياناتك.</h1>
+                    <p class="auth-subtitle">عشان نجهزلك لوحة التحكم وتصير أمورك تمام.</p>
+
+                    <form id="profile-form">
+                        <!-- Profile Pic -->
+                        <div class="profile-pic-wrapper">
+                            <div class="profile-pic" id="pic-preview" onclick="document.getElementById('profile-upload').click();">
+                                <i class="fa-solid fa-camera" id="camera-icon"></i>
+                            </div>
+                            <span class="pic-hint">صورة البروفايل (اختياري)</span>
+                            <input type="file" id="profile-upload" accept="image/*" style="display: none;">
+                        </div>
+
+                        <!-- Names -->
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label class="input-label">الاسم الأول</label>
+                                <input type="text" id="prof-first-name" class="form-control" placeholder="اسمك" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">اسم العائلة</label>
+                                <input type="text" id="prof-last-name" class="form-control" placeholder="عيلتك" required>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="input-group">
+                            <label class="input-label">من وين؟</label>
+                            <select id="prof-region" class="form-control" required>
+                                <option value="" disabled selected>اختار المنطقة</option>
+                                <option value="westbank">الضفة الغربية</option>
+                                <option value="48">الداخل الفلسطيني</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group" id="city-group" style="display: none;">
+                            <label class="input-label">المدينة</label>
+                            <select id="prof-city" class="form-control" required>
+                                <!-- Cities injected via JS -->
+                            </select>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="input-group">
+                            <label class="input-label">رقم الواتساب</label>
+                            <div style="display: flex; gap: 12px;">
+                                <select id="prof-prefix" class="form-control" style="width: 110px; flex-shrink: 0;" required>
+                                    <option value="+970">+970</option>
+                                    <option value="+972">+972</option>
+                                </select>
+                                <input type="tel" id="prof-phone" class="form-control" placeholder="599xxxxxx" style="flex: 1;" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="profile-btn-text">احفظ وافتح حسابي <i class="fa-solid fa-check"></i></button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- LEFT SIDE: VISUAL -->
+        <div class="auth-visual-side">
+            <div class="visual-abstract">*</div>
+            <div class="visual-typography">
+                <span class="light">شراكة</span><br>
+                عنجد.<br>
+                <span class="brand-text">كاش</span><br>
+                ع السريع.
+            </div>
+        </div>
+
+    </main>
+
+    <!-- =========================================================
+         UI LOGIC (Theme, Views, City Select, Image Preview)
+    ========================================================= -->
+    <script>
+        const savedTheme = localStorage.getItem('art-theme');
+        if (savedTheme === 'dark') document.body.classList.add('dark');
+
+        function toggleAuthView(event, targetId) {
+            if(event) event.preventDefault();
+            document.querySelectorAll('.auth-view').forEach(view => view.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Open registration directly when coming from a "بلّش شراكة" button
+        const authView = new URLSearchParams(window.location.search).get('view');
+        if (authView === 'register') {
+            toggleAuthView(null, 'register-view');
+        }
+
+        // Image Preview Logic
+        const picUpload = document.getElementById('profile-upload');
+        const picPreview = document.getElementById('pic-preview');
+        const cameraIcon = document.getElementById('camera-icon');
+
+        picUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    picPreview.style.backgroundImage = `url(${e.target.result})`;
+                    cameraIcon.style.display = 'none';
+                    picPreview.style.borderStyle = 'solid';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Cities Logic
+        const regionSelect = document.getElementById('prof-region');
+        const cityGroup = document.getElementById('city-group');
+        const citySelect = document.getElementById('prof-city');
+
+        const cities = {
+            'westbank': ['القدس', 'رام الله والبيرة', 'الخليل', 'نابلس', 'جنين', 'طولكرم', 'قلقيلية', 'بيت لحم', 'أريحا', 'طوباس', 'سلفيت'],
+            '48': ['عكا', 'حيفا', 'يافا', 'الناصرة', 'اللد', 'الرملة', 'بئر السبع', 'رهط', 'أم الفحم', 'سخنين', 'الطيبة', 'باقة الغربية', 'شفاعمرو', 'المغار', 'عرابة', 'أخرى']
+        };
+
+        regionSelect.addEventListener('change', function() {
+            const region = this.value;
+            citySelect.innerHTML = '<option value="" disabled selected>اختار المدينة</option>';
+            
+            if(cities[region]) {
+                cities[region].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                cityGroup.style.display = 'block';
+            } else {
+                cityGroup.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- =========================================================
+         FIREBASE AUTH + FIRESTORE + STORAGE
+    ========================================================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBC4KevTkZ_myJZ5kG7LXqAALUVSdLsnHE",
+            authDomain: "mawaseel.firebaseapp.com",
+            projectId: "mawaseel",
+            storageBucket: "mawaseel.firebasestorage.app",
+            messagingSenderId: "877553024815",
+            appId: "1:877553024815:web:bdd1a3c4b352e915e06bda",
+            measurementId: "G-7X5GBYVJ9M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        // Keep the partner signed in even after closing/reopening the browser.
+        await setPersistence(auth, browserLocalPersistence);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        let currentUser = null; 
+
+        function makePartnerCode(uid) {
+            return 'MW-' + String(uid || 'PARTNER').replace(/[^a-z0-9]/gi, '').slice(0, 10).toUpperCase();
+        }
+
+        async function checkAndRouteUser(user) {
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    let profile = docSnap.data();
+                    const isAdmin = profile.role === 'admin' || profile.isAdmin === true;
+                    if (!isAdmin && !profile.partnerCode) {
+                        const partnerCode = makePartnerCode(user.uid);
+                        await setDoc(docRef, { partnerCode }, { merge: true });
+                        profile = { ...profile, partnerCode };
+                    }
+                    localStorage.setItem('mawaseel-partner-preview', JSON.stringify({
+                        firstName: profile.firstName || user.displayName?.split(' ')[0] || '',
+                        lastName: profile.lastName || '',
+                        photoURL: profile.photoURL || user.photoURL || '',
+                        partnerCode: profile.partnerCode || ''
+                    }));
+                    window.location.href = isAdmin ? "https://admin.mawaseel.ps/" : "partner.html";
+                } else {
+                    currentUser = user;
+                    toggleAuthView(null, 'profile-view');
+                }
+            } catch(e) {
+                console.error(e);
+                alert('خطأ في الاتصال بقاعدة البيانات.');
+            }
+        }
+
+        // 1. REGISTER
+        document.getElementById('register-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('register-btn-text');
+            btn.innerHTML = 'جاري المعالجة...';
+
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    currentUser = userCredential.user;
+                    toggleAuthView(null, 'profile-view');
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/email-already-in-use') alert('هذا الإيميل مسجل مسبقاً.');
+                    else alert('خطأ: ' + error.message);
+                })
+                .finally(() => btn.innerHTML = 'الخطوة التالية <i class="fa-solid fa-arrow-left"></i>');
+        });
+
+        // 2. LOGIN 
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn-text');
+            btn.innerHTML = 'لحظة شوي...';
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    checkAndRouteUser(userCredential.user);
+                })
+                .catch((error) => {
+                    alert('الإيميل أو كلمة السر غلط.');
+                })
+                .finally(() => btn.innerHTML = 'فوت ع حسابك <i class="fa-solid fa-arrow-left"></i>');
+        });
+
+        // 3. GOOGLE LOGIN/REGISTER
+        function handleGoogleLogin() {
+            signInWithPopup(auth, googleProvider)
+                .then((result) => {
+                    checkAndRouteUser(result.user);
+                }).catch((error) => alert('صارت مشكلة بتسجيل الدخول.'));
+        }
+        document.getElementById('google-login-btn').addEventListener('click', handleGoogleLogin);
+        document.getElementById('google-register-btn').addEventListener('click', handleGoogleLogin);
+
+        // 4. SUBMIT PROFILE FORM (Step 2)
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!currentUser) { alert('صارت مشكلة، حاول تسجل من جديد.'); return; }
+
+            const btn = document.getElementById('profile-btn-text');
+            btn.innerHTML = 'جاري الحفظ... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+            const fname = document.getElementById('prof-first-name').value;
+            const lname = document.getElementById('prof-last-name').value;
+            const region = document.getElementById('prof-region').value;
+            const city = document.getElementById('prof-city').value;
+            const phone = document.getElementById('prof-prefix').value + document.getElementById('prof-phone').value;
+            const file = document.getElementById('profile-upload').files[0];
+
+            try {
+                let photoURL = currentUser.photoURL || ""; 
+
+                if(file) {
+                    const imageRef = ref(storage, `profile_pictures/${currentUser.uid}_${file.name}`);
+                    await uploadBytes(imageRef, file);
+                    photoURL = await getDownloadURL(imageRef);
+                }
+
+                await setDoc(doc(db, "users", currentUser.uid), {
+                    firstName: fname,
+                    lastName: lname,
+                    region: region,
+                    city: city,
+                    whatsapp: phone,
+                    email: currentUser.email,
+                    photoURL: photoURL,
+                    partnerCode: makePartnerCode(currentUser.uid),
+                    role: "partner",
+                    createdAt: new Date().toISOString()
+                });
+
+                localStorage.setItem('mawaseel-partner-preview', JSON.stringify({
+                    firstName: fname,
+                    lastName: lname,
+                    photoURL: photoURL,
+                    partnerCode: makePartnerCode(currentUser.uid)
+                }));
+
+                window.location.href = "partner.html";
+
+            } catch(error) {
+                console.error(error);
+                alert('صارت مشكلة بحفظ البيانات، تأكد إنك مشغل Firestore و Storage من لوحة الفايربيس.');
+            } finally {
+                btn.innerHTML = 'احفظ وافتح حسابي <i class="fa-solid fa-check"></i>';
+            }
+        });
+
+    </script>
+</body>
+</html>

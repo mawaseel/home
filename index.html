@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواصيل | شراكة حقيقية</title>
+    
+    <link rel="preload" as="image" href="https://i.ibb.co/678mybGy/image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* =========================================================
+           1. CORE TOKENS (Editorial & Brutalist SaaS)
+        ========================================================= */
+        :root {
+            --brand: #FF4500; 
+            --brand-glow: rgba(255, 69, 0, 0.25);
+            --bg-main: #F4F3ED; 
+            --bg-alt: #FFFFFF;
+            --text-dark: #0A0A0B;
+            --text-muted: #666666;
+            --line-color: rgba(10, 10, 11, 0.1);
+            
+            --font-stack: 'Cairo', sans-serif;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.dark {
+            --bg-main: #0C0C0C; 
+            --bg-alt: #161616;
+            --text-dark: #F5F5F5;
+            --text-muted: #888888;
+            --line-color: rgba(245, 245, 245, 0.1);
+            --brand: #FF5722;
+            --brand-glow: rgba(255, 87, 34, 0.15);
+        }
+
+        /* =========================================================
+           2. RESET & TEXTURE
+        ========================================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            overflow-x: hidden; 
+            line-height: 1.5;
+            transition: background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
+        }
+
+        /* Subtle Human Texture */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04; z-index: 9999; pointer-events: none; mix-blend-mode: multiply;
+        }
+        body.dark::before { opacity: 0.03; mix-blend-mode: screen; }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { border: none; background: none; font-family: inherit; cursor: pointer; outline: none; }
+
+        /* =========================================================
+           3. THE PREMIUM HEADER 
+        ========================================================= */
+        .art-header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 4vw; pointer-events: auto;
+            background: rgba(244, 243, 237, 0.85);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            transition: 0.4s var(--ease-out);
+        }
+        body.dark .art-header {
+            background: rgba(12, 12, 12, 0.85);
+        }
+        .art-header.scrolled {
+            padding: 12px 4vw;
+            border-bottom: 1px solid var(--line-color);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+        }
+
+        .brand-logo {
+            display: flex; align-items: center; z-index: 2;
+        }
+        .brand-logo img {
+            height: clamp(36px, 5vw, 42px); 
+            width: auto; object-fit: contain; display: block;
+        }
+
+        .nav-links { 
+            display: flex; gap: 28px; align-items: center; 
+        }
+        .nav-links a { 
+            font-weight: 700; font-size: 0.95rem; color: var(--text-dark);
+            transition: color 0.3s; position: relative; opacity: 0.85;
+        }
+        .nav-links a:hover { opacity: 1; color: var(--brand); }
+
+        .header-actions {
+            display: flex; align-items: center; gap: 20px; z-index: 2;
+        }
+
+        .login-link { 
+            font-size: 0.95rem; font-weight: 700; color: var(--text-muted); transition: 0.3s; 
+        }
+        .login-link:hover { color: var(--text-dark); }
+
+        .header-join-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px; border-radius: 100px;
+            background: linear-gradient(135deg, var(--brand), #ff6b3d);
+            color: #fff; font-size: 0.92rem; font-weight: 900;
+            box-shadow: 0 8px 22px var(--brand-glow);
+            transition: 0.3s var(--ease-out); white-space: nowrap;
+        }
+        .header-join-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255,69,0,.3); color:#fff; }
+
+        .theme-toggle {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: grid; place-items: center; background: transparent;
+            color: var(--text-dark); border: 1px solid var(--line-color); 
+            transition: 0.3s; opacity: 0.8;
+        }
+        .theme-toggle:hover { opacity: 1; transform: scale(1.1) rotate(15deg); border-color: var(--text-dark); }
+
+        /* Mobile Controls Area */
+        .mobile-controls {
+            display: none; align-items: center; gap: 12px; z-index: 2;
+        }
+
+        .mobile-header-login {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid var(--line-color);
+            background: var(--bg-alt);
+            transition: 0.3s var(--ease-out);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mobile-header-login:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .mobile-toggle { 
+            display: grid; place-items: center; width: 40px; height: 40px; 
+            background: transparent; border: 1px solid var(--line-color); 
+            border-radius: 50%; font-size: 1.1rem; pointer-events: auto;
+            color: var(--text-dark);
+        }
+
+        /* =========================================================
+           4. THE HERO (Editorial Layout) + MAIN CTA
+        ========================================================= */
+        .hero-section {
+            min-height: 100vh; padding: 20vh 4vw 10vh;
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative;
+        }
+
+        .hero-layout {
+            display: grid; grid-template-columns: 1.5fr 1fr; gap: 4vw; align-items: center;
+            position: relative; z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 9rem);
+            font-weight: 900; line-height: 0.9; letter-spacing: -2px;
+            color: var(--text-dark); margin-bottom: 24px; position: relative; z-index: 1;
+        }
+        .hero-title .offset { display: block; margin-right: 10%; color: var(--brand); }
+        .hero-title .light { font-weight: 500; font-size: clamp(2rem, 5vw, 6rem); letter-spacing: -1px; }
+
+        .hero-desc {
+            font-size: clamp(1.1rem, 1.5vw, 1.3rem); max-width: 500px;
+            color: var(--text-muted); font-weight: 500; margin-right: 10%;
+            padding-left: 20px; border-right: 2px solid var(--brand);
+        }
+
+        /* THE HERO CTA BUTTON */
+        .hero-cta-group {
+            margin-top: 40px; margin-right: 10%;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--brand), #ff6b3d);
+            color: #FFFFFF;
+            padding: 16px 40px; border-radius: 100px;
+            font-weight: 900; font-size: 1.15rem;
+            display: inline-flex; align-items: center; gap: 12px;
+            box-shadow: 0 10px 30px var(--brand-glow);
+            transition: 0.3s var(--ease-out);
+            border: none;
+        }
+        body.dark .btn-hero-primary { color: #FFFFFF; }
+        .btn-hero-primary:hover {
+            transform: translateY(-4px) scale(1.02); 
+            box-shadow: 0 15px 40px rgba(255, 69, 0, 0.35);
+            color: #FFFFFF;
+        }
+
+        .hero-visual-layer {
+            position: absolute; left: 5vw; top: 50%; transform: translateY(-50%);
+            width: 45vw; height: 60vh; z-index: 10; pointer-events: none;
+        }
+
+        .ui-receipt {
+            position: absolute; right: 0; top: 10%;
+            background: var(--bg-alt); padding: 32px;
+            border: 1px solid var(--line-color);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            width: 100%; max-width: 380px; transform: rotate(4deg);
+            pointer-events: auto;
+        }
+        body.dark .ui-receipt { box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        
+        .receipt-head { display: flex; justify-content: space-between; border-bottom: 2px dashed var(--line-color); padding-bottom: 16px; margin-bottom: 16px; }
+        .receipt-head span { font-weight: 900; font-size: 1.2rem; }
+        .receipt-head i { color: var(--brand); font-size: 1.5rem; }
+        
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 500; color: var(--text-muted); font-size: 0.95rem; }
+        .receipt-total { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--text-dark); font-weight: 900; font-size: 1.5rem; color: var(--brand); }
+
+        .ui-notification {
+            position: absolute; left: -20px; bottom: 20%;
+            background: var(--text-dark); color: var(--bg-main);
+            padding: 16px 24px; border-radius: 0; 
+            display: flex; align-items: center; gap: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+            pointer-events: auto; width: max-content; max-width: 90%;
+        }
+        .ui-notification i { color: #00FF88; font-size: 1.5rem; }
+        .ui-notification div strong { display: block; font-size: 1.1rem; }
+        .ui-notification div span { font-size: 0.85rem; opacity: 0.7; }
+
+        /* =========================================================
+           5. TYPOGRAPHIC CENTERPIECE
+        ========================================================= */
+        .typographic-section {
+            padding: 15vh 4vw; border-top: 1px solid var(--line-color);
+            position: relative; overflow: hidden;
+        }
+        .huge-number {
+            font-size: clamp(6rem, 25vw, 25rem); font-weight: 900;
+            line-height: 0.8; letter-spacing: -5px;
+            color: transparent; -webkit-text-stroke: 2px var(--line-color);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 0; pointer-events: none; white-space: nowrap;
+        }
+        .statement-content {
+            position: relative; z-index: 2; text-align: center; max-width: 800px; margin: 0 auto;
+        }
+        .statement-content h2 {
+            font-size: clamp(1.8rem, 4vw, 3.5rem); font-weight: 900; margin-bottom: 24px; letter-spacing: -1px; line-height: 1.2;
+        }
+        .statement-content p {
+            font-size: clamp(1rem, 2vw, 1.25rem); color: var(--text-muted);
+        }
+        .highlight-text { background: var(--brand); color: #fff; padding: 4px 12px; display: inline-block; transform: rotate(-2deg); margin: 0 8px; }
+
+        /* =========================================================
+           6. EDITORIAL STEPS
+        ========================================================= */
+        .editorial-steps { padding: 10vh 4vw 15vh; }
+        .step-row {
+            display: grid; grid-template-columns: 1fr 2fr; gap: 4vw;
+            border-top: 1px solid var(--line-color); padding: 6vh 0;
+            align-items: start; transition: 0.4s;
+        }
+        .step-row:hover { background: var(--bg-alt); padding-right: 2vw; padding-left: 2vw; }
+        
+        .step-number { font-size: clamp(4rem, 8vw, 8rem); font-weight: 900; color: var(--line-color); line-height: 0.8; transition: 0.4s; }
+        .step-row:hover .step-number { color: var(--brand); transform: translateX(-10px); }
+        
+        .step-content h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+        .step-content p { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text-muted); max-width: 600px; }
+
+        /* =========================================================
+           7. VISUAL SHOWCASE
+        ========================================================= */
+        .showcase-section {
+            padding: 10vh 4vw; background: var(--bg-alt); border-top: 1px solid var(--line-color);
+        }
+        .showcase-header { font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 900; margin-bottom: 8vh; max-width: 900px; letter-spacing: -1px; line-height: 1.2;}
+        
+        .showcase-grid {
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 2vw;
+        }
+        
+        .showcase-item {
+            position: relative; border: 1px solid var(--line-color); padding: 40px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            min-height: 400px; background: var(--bg-main); transition: 0.4s;
+        }
+        .showcase-item:hover { border-color: var(--text-dark); }
+        
+        .item-1 { grid-column: 1 / 8; }
+        .item-2 { grid-column: 8 / 13; background: var(--text-dark); color: var(--bg-main); }
+        .item-3 { grid-column: 1 / 6; border: none; background: transparent; justify-content: center;}
+        .item-4 { grid-column: 6 / 13; }
+
+        .showcase-item h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; margin-bottom: 16px; }
+        .showcase-item p { font-size: clamp(1rem, 1.2vw, 1.1rem); opacity: 0.8; max-width: 400px; }
+        .item-2 h3, .item-2 p { color: var(--bg-main); }
+
+        .insert-chart { position: absolute; top: 40px; left: 40px; width: 60%; height: 120px; border-bottom: 2px solid var(--brand); border-left: 2px solid var(--text-muted); display: flex; align-items: flex-end; gap: 10px; padding-left: 10px; }
+        .insert-chart .bar { width: 30px; background: var(--text-dark); border-radius: 2px 2px 0 0; }
+        .insert-abstract { position: absolute; top: -30px; right: -30px; font-size: clamp(6rem, 10vw, 10rem); color: var(--brand); line-height: 1; font-weight: 900; opacity: 0.2; }
+
+        /* =========================================================
+           8. MASSIVE CTA
+        ========================================================= */
+        .brutal-cta {
+            padding: 15vh 4vw; text-align: center;
+            border-top: 1px solid var(--line-color); background: var(--brand); color: #fff;
+        }
+        .brutal-cta h2 { font-size: clamp(2.5rem, 7vw, 6rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 40px; color: #fff; line-height: 1.1;}
+        .brutal-btn {
+            display: inline-flex; align-items: center; gap: 16px;
+            background: #fff; color: var(--brand); font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 900;
+            padding: 16px 40px; border-radius: 100px; transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .brutal-btn:hover { transform: scale(1.05); }
+
+        /* =========================================================
+           9. FOOTER
+        ========================================================= */
+        .art-footer {
+            padding: 8vh 4vw 4vh; background: var(--text-dark); color: var(--bg-main);
+        }
+        .footer-top {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding-bottom: 6vh; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 4vh;
+            gap: 40px; flex-wrap: wrap;
+        }
+        .footer-logo img { height: clamp(40px, 6vw, 60px); filter: invert(1); object-fit: contain; }
+        .footer-desc { max-width: 350px; font-size: 0.95rem; opacity: 0.8; margin-top: 16px; }
+        
+        .footer-links { display: flex; gap: 4vw; flex-wrap: wrap; }
+        .footer-col h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 24px; }
+        .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+        .footer-col a { font-size: 1.1rem; font-weight: 500; transition: color 0.3s; }
+        .footer-col a:hover { color: var(--brand); }
+        .footer-bottom { font-size: 0.85rem; opacity: 0.6; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+        /* =========================================================
+           10. ANIMATIONS
+        ========================================================= */
+        .anim-reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .anim-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* =========================================================
+           11. MOBILE RESPONSIVENESS
+        ========================================================= */
+        @media (max-width: 1024px) {
+            .nav-links, .header-actions { display: none; }
+            .mobile-controls { display: flex; }
+
+            .hero-layout { grid-template-columns: 1fr; gap: 64px; }
+            .hero-desc { margin-right: 0; padding-left: 0; border-right: none; border-top: 2px solid var(--brand); padding-top: 20px; }
+            .hero-cta-group { margin-right: 0; }
+            
+            .hero-visual-layer {
+                position: relative; width: 100%; height: auto; transform: none; left: auto; top: auto;
+                display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0;
+            }
+            .ui-receipt { position: relative; right: auto; top: auto; width: 90%; max-width: 400px; transform: rotate(1deg); z-index: 1; }
+            .ui-notification { position: relative; left: auto; bottom: auto; width: 90%; max-width: 350px; transform: rotate(-2deg); margin-top: -30px; align-self: center; z-index: 2; }
+        }
+
+        @media (max-width: 768px) {
+            .art-header { 
+                padding: 12px 5%; background: rgba(244, 243, 237, 0.95); 
+                backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-color); 
+            }
+            body.dark .art-header { background: rgba(12, 12, 12, 0.95); }
+            
+            .hero-section { padding: 140px 5% 60px; min-height: auto; }
+            .hero-title { margin-bottom: 16px; }
+            .btn-hero-primary { width: 100%; justify-content: center; } 
+            
+            .typographic-section { padding: 80px 5%; }
+            .huge-number { position: relative; transform: none; top: auto; left: auto; text-align: center; margin-bottom: 24px; font-size: 30vw; line-height: 1;}
+            .statement-content { text-align: right; }
+            
+            .editorial-steps { padding: 60px 5%; }
+            .step-row { grid-template-columns: 1fr; gap: 12px; padding: 40px 0; border-top: 1px solid var(--line-color); }
+            .step-row:hover { background: transparent; padding-right: 0; padding-left: 0; }
+            .step-number { font-size: 4rem; text-align: right; margin-bottom: -10px; }
+            
+            .showcase-section { padding: 60px 5%; }
+            .showcase-header { margin-bottom: 40px; }
+            .showcase-grid { display: flex; flex-direction: column; gap: 24px; }
+            .showcase-item { grid-column: 1 / -1 !important; min-height: auto; padding: 32px 24px; }
+            .insert-chart { position: relative; top: 0; left: 0; width: 100%; height: 80px; margin-bottom: 24px; }
+            .item-3 h3 { font-size: 3rem; text-align: center; }
+
+            .art-footer { padding: 60px 5% 40px; }
+            .footer-top { flex-direction: column; align-items: flex-start; gap: 40px; }
+            .footer-links { flex-direction: column; gap: 32px; width: 100%; }
+        }
+
+        /* Mobile Menu Overlay - Links + Login only inside */
+        .mobile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg-main); z-index: 90; padding: 90px 5% 40px;
+            display: flex; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: 0.4s var(--ease-out);
+            transform: translateY(-20px); overflow-y: auto;
+        }
+        .mobile-overlay.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        
+        .mobile-nav-links { display: flex; flex-direction: column; gap: 0; }
+        .mobile-nav-links a { font-size: 1.25rem; font-weight: 800; padding: 16px 0; border-bottom: 1px solid var(--line-color); color: var(--text-dark); }
+        
+        .mobile-login-area {
+            margin-top: 24px; padding-top: 24px;
+        }
+        .mobile-login-link { 
+            display: inline-flex; align-items: center; gap: 10px;
+            font-size: 1.1rem; font-weight: 700; color: var(--text-muted); 
+        }
+        .mobile-login-link:hover { color: var(--text-dark); }
+
+        .mobile-join-btn {
+            margin-top: 16px; width: 100%; min-height: 52px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 14px 22px; border-radius: 100px;
+            background: linear-gradient(135deg, var(--brand), #ff6b3d);
+            color: #fff; font-size: 1rem; font-weight: 900;
+            box-shadow: 0 10px 26px var(--brand-glow);
+        }
+        
+        .theme-toggle-mob { 
+            display: inline-flex; align-items: center; justify-content: center; gap: 12px; 
+            font-size: 1.1rem; font-weight: 700; margin-top: 32px; color: var(--text-dark);
+            padding: 12px; border: 1px solid var(--line-color); border-radius: 100px;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SINGLE ROW HEADER -->
+    <header class="art-header" id="header">
+        
+        <!-- 1. Pure Logo -->
+        <a href="#home" class="brand-logo">
+            <img src="https://i.ibb.co/678mybGy/image.png" alt="مواصيل">
+        </a>
+        
+        <!-- 2. Main Navigation Links (Desktop) -->
+        <nav class="nav-links">
+            <a href="#home">الرئيسية</a>
+            <a href="#about">عن المنصة</a>
+            <a href="#features">المميزات</a>
+            <a href="#pricing">الأسعار</a>
+            <a href="#blog">المدونة</a>
+            <a href="#contact">تواصل معنا</a>
+        </nav>
+
+        <!-- 3. Actions (Desktop - Kept clean) -->
+        <div class="header-actions">
+            <a href="login.html" class="login-link">تسجيل دخول</a>
+            <a href="login.html?view=register" class="header-join-btn">بلّش شراكة! <i class="fa-solid fa-arrow-left"></i></a>
+            <button class="theme-toggle" id="theme-btn" aria-label="Toggle Theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+
+        <!-- 4. Mobile Controls (Visible on smaller screens ONLY) -->
+        <div class="mobile-controls">
+            <button class="mobile-toggle" id="mobile-btn" aria-label="Menu">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+
+    </header>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div class="mobile-overlay" id="mobile-menu">
+        <div class="mobile-nav-links">
+            <a href="#home">الرئيسية</a>
+            <a href="#about">عن المنصة</a>
+            <a href="#features">المميزات</a>
+            <a href="#pricing">الأسعار</a>
+            <a href="#blog">المدونة</a>
+            <a href="#contact">تواصل معنا</a>
+        </div>
+        
+        <div class="mobile-login-area">
+            <a href="login.html" class="mobile-login-link"><i class="fa-solid fa-user"></i> تسجيل دخول</a>
+            <a href="login.html?view=register" class="mobile-join-btn">بلّش شراكتك <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+
+        <button class="theme-toggle-mob" id="theme-btn-mob">
+            <i class="fa-solid fa-moon"></i> <span>الوضع الليلي</span>
+        </button>
+    </div>
+
+    <main>
+        <!-- HERO COMPOSITION WITH THE CTA BUTTON -->
+        <section class="hero-section" id="home">
+            <div class="hero-layout">
+                <div class="hero-text anim-reveal">
+                    <h1 class="hero-title">
+                        <span class="light">شراكة</span><br>
+                        <span class="offset">عنجد.</span><br>
+                        كاش ع السريع.
+                    </h1>
+                    <p class="hero-desc">
+                        فش قوالب جاهزة ولا تعقيد. جيب زباين لمواصيل عشان يوصوا من برا، وبلّش نزّل أرباح صافية بدون ولا شيكل رأس مال.
+                    </p>
+                    
+                    <div class="hero-cta-group">
+                        <a href="login.html?view=register" class="btn-hero-primary">
+                            بلّش شراكتك معنا <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    
+                </div>
+
+                <div class="hero-visual-layer anim-reveal" style="transition-delay: 0.2s;" id="parallax-area">
+                    <div class="ui-receipt parallax-el" data-speed="2">
+                        <div class="receipt-head">
+                            <span>ملخص الأرباح</span>
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div class="receipt-row"><span>طلب جديد (#8921)</span> <span>+ ₪45.00</span></div>
+                        <div class="receipt-row"><span>طلب جديد (#8922)</span> <span>+ ₪32.50</span></div>
+                        <div class="receipt-row" style="opacity: 0.5;"><span>قيد التوصيل (#8923)</span> <span>--</span></div>
+                        <div class="receipt-total">
+                            <span>الرصيد المتاح</span>
+                            <span>₪ 1,280</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-notification parallax-el" data-speed="-1.5">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>شراكة مضمونة</strong>
+                            <span>50% نسبتك من الأرباح الصافية[cite: 1]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TYPOGRAPHIC CENTERPIECE -->
+        <section class="typographic-section" id="about">
+            <div class="huge-number anim-reveal">50%</div>
+            <div class="statement-content anim-reveal">
+                <h2>أنت مش مجرد مسوق، أنت <span class="highlight-text">شريكنا</span></h2>
+                <p>انسى العمولات التعبانة. لما زباينك يطلبوا عن طريق منصتنا، بتاخذ 50% من الأرباح الصافية[cite: 1] للطلبية ع الجاهز. كل شي مكشوف، أرقام واضحة، وفش مفاجآت.</p>
+            </div>
+        </section>
+
+        <!-- EDITORIAL STEPS -->
+        <section class="editorial-steps">
+            <div class="step-row anim-reveal">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3>افتح حسابك بثواني</h3>
+                    <p>عملية تسجيل سريعة وما بتغلب. بتاخذ حساب شريك خاص ولوحة تحكم مرتبة بتورجيك طلبات زباينك وعمولاتك أول بأول.</p>
+                </div>
+            </div>
+
+            <div class="step-row anim-reveal">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3>جيب زباينك</h3>
+                    <p>جيب الزبون بطريقتك، ولما يقرر يطلب بتتواصل معنا على واتساب الوساطة. فريقنا بسجّل الطلب باسم الزبون وبربطه بحسابك عشان تتابعه خطوة بخطوة.</p>
+                </div>
+            </div>
+
+            <div class="step-row anim-reveal">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3>اسحب كاشك</h3>
+                    <p>أرباحك بتصير جاهزة للسحب أول ما الزبون يستلم طلبيته. وبتقدر تسحبها طوالي ع المحافظ المحلية بدون أي تأخير.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISUAL SHOWCASE -->
+        <section class="showcase-section" id="features">
+            <h2 class="showcase-header anim-reveal">منصة مصممة عشان تريحك وتخلي كل شي واضح قدامك.</h2>
+            
+            <div class="showcase-grid">
+                <div class="showcase-item item-1 anim-reveal">
+                    <div class="insert-chart">
+                        <div class="bar" style="height: 30%"></div>
+                        <div class="bar" style="height: 60%"></div>
+                        <div class="bar" style="height: 40%; background: var(--brand);"></div>
+                        <div class="bar" style="height: 90%"></div>
+                    </div>
+                    <h3>أرقامك قدام عينك</h3>
+                    <p>تابع بشكل مباشر كل كبسة، كل طلب، وكل عمولة بتنزل بحسابك.</p>
+                </div>
+
+                <div class="showcase-item item-2 anim-reveal">
+                    <div class="insert-abstract">*</div>
+                    <h3>شغالين بالضفة والداخل</h3>
+                    <p>منصتنا مهيأة تتعامل مع كل تفاصيل الشحن والتوصيل المحلي باحترافية.</p>
+                </div>
+
+                <div class="showcase-item item-3 anim-reveal" id="pricing">
+                    <h3 style="font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1;">دفع<br>ع السريع.</h3>
+                </div>
+
+                <div class="showcase-item item-4 anim-reveal">
+                    <h3>وين ما كنت</h3>
+                    <p>استلم أرباحك عن طريق المحافظ الإلكترونية المعتمدة بفلسطين بكل سهولة.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MASSIVE CTA -->
+        <section class="brutal-cta" id="join">
+            <h2 class="anim-reveal">وقتك هسا، خلينا نكبرها سوا.</h2>
+            <a href="login.html?view=register" class="brutal-btn anim-reveal" style="transition-delay: 0.1s;">
+                بلّش شراكتك هسا <i class="fa-solid fa-arrow-left"></i>
+            </a>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="art-footer" id="contact">
+        <div class="footer-top">
+            <div>
+                <a href="#home" class="footer-logo">
+                    <img src="https://i.ibb.co/678mybGy/image.png" alt="مواصيل">
+                </a>
+                <p class="footer-desc">مواصيل هي شريكك الصح عشان تعمل كاش من ورا جلب الزباين لخدمة الطلب السهل والمضمون من أشهر المتاجر العالمية.</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>المنصة</h4>
+                    <ul>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#how">كيف بنشتغل؟</a></li>
+                        <li><a href="#features">المميزات</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>انضم إلنا</h4>
+                    <ul>
+                        <li><a href="login.html?view=register">إنشاء حساب</a></li>
+                        <li><a href="login.html">تسجيل الدخول</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 MAWASEEL. ALL RIGHTS RESERVED.</span>
+            <span>DESIGNED FOR PARTNERS.</span>
+        </div>
+    </footer>
+
+    <!-- INTERACTION LOGIC -->
+    <script>
+        // 1. Theme Logic
+        const body = document.body;
+        const desktopThemeIcon = document.querySelector('#theme-btn i');
+        const mobileThemeIcon = document.querySelector('#theme-btn-mob i');
+        
+        function applyTheme(isDark) {
+            if(isDark) {
+                body.classList.add('dark');
+                desktopThemeIcon.classList.replace('fa-moon', 'fa-sun');
+                mobileThemeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                body.classList.remove('dark');
+                desktopThemeIcon.classList.replace('fa-sun', 'fa-moon');
+                mobileThemeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+            localStorage.setItem('art-theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('art-theme') === 'dark') { applyTheme(true); }
+
+        document.getElementById('theme-btn').addEventListener('click', () => applyTheme(!body.classList.contains('dark')));
+        document.getElementById('theme-btn-mob').addEventListener('click', () => applyTheme(!body.classList.contains('dark')));
+
+        // 2. Mobile Menu Logic
+        const mobileBtn = document.getElementById('mobile-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const header = document.getElementById('header');
+        
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const icon = mobileBtn.querySelector('i');
+            if(mobileMenu.classList.contains('active')){
+                icon.classList.replace('fa-bars-staggered', 'fa-xmark');
+                header.style.background = 'transparent';
+                header.style.borderBottom = 'none';
+            } else {
+                icon.classList.replace('fa-xmark', 'fa-bars-staggered');
+                header.style.background = '';
+                header.style.borderBottom = '';
+            }
+        });
+
+        mobileMenu.querySelectorAll('.mobile-nav-links a, .mobile-login-link, .mobile-join-btn').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                mobileBtn.querySelector('i').classList.replace('fa-xmark', 'fa-bars-staggered');
+                header.style.background = '';
+                header.style.borderBottom = '';
+            });
+        });
+
+        // 3. Subtle Parallax (Desktop Only)
+        const parallaxEls = document.querySelectorAll('.parallax-el');
+        if (window.innerWidth > 1024) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX - window.innerWidth / 2) / 100;
+                const y = (e.clientY - window.innerHeight / 2) / 100;
+                parallaxEls.forEach(el => {
+                    const speed = el.getAttribute('data-speed');
+                    const baseRotate = el.classList.contains('ui-receipt') ? 'rotate(4deg)' : 'rotate(-3deg)';
+                    el.style.transform = `translate(${x * speed}px, ${y * speed}px) ${baseRotate}`;
+                });
+            });
+        }
+
+        // 4. Scroll Reveal
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.anim-reveal').forEach(el => observer.observe(el));
+
+        // 5. Smooth Anchor Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - (window.innerWidth < 768 ? 70 : 100),
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+        
+        // 6. Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+
+    <!-- Firebase Session Guard: signed-in partners/admins skip the landing page -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBC4KevTkZ_myJZ5kG7LXqAALUVSdLsnHE",
+            authDomain: "mawaseel.firebaseapp.com",
+            projectId: "mawaseel",
+            storageBucket: "mawaseel.firebasestorage.app",
+            messagingSenderId: "877553024815",
+            appId: "1:877553024815:web:bdd1a3c4b352e915e06bda",
+            measurementId: "G-7X5GBYVJ9M"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) return;
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                const profile = snap.exists() ? snap.data() : {};
+                const isAdmin = profile.role === 'admin' || profile.isAdmin === true;
+                window.location.replace(isAdmin ? 'https://admin.mawaseel.ps/' : 'partner.html');
+            } catch (e) {
+                console.error('Session routing failed', e);
+                window.location.replace('partner.html');
+            }
+        });
+    </script>
+</body>
+</html>
