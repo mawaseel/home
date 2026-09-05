@@ -802,8 +802,7 @@
             try {
                 const snap = await getDoc(doc(db, 'users', user.uid));
                 const profile = snap.exists() ? snap.data() : {};
-                const isAdmin = profile.role === 'admin' || profile.isAdmin === true;
-                window.location.replace(isAdmin ? 'https://admin.mawaseel.ps/' : 'partner.html');
+                window.location.replace('partner.html');
             } catch (e) {
                 console.error('Session routing failed', e);
                 window.location.replace('partner.html');

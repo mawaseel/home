@@ -8,6 +8,6 @@ Contains:
 - Content Bank, Learn, PDF Files, Tools, Profile
 
 Dashboard button goes to https://dashboard.mawaseel.ps/
-Admin accounts are redirected to https://admin.mawaseel.ps/
+Admin accounts can use the partner portal too; they are no longer redirected automatically to the admin site.
 
 IMPORTANT: Add all three domains to Firebase Authentication > Authorized domains.

@@ -435,8 +435,7 @@
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     let profile = docSnap.data();
-                    const isAdmin = profile.role === 'admin' || profile.isAdmin === true;
-                    if (!isAdmin && !profile.partnerCode) {
+                    if (!profile.partnerCode) {
                         const partnerCode = makePartnerCode(user.uid);
                         await setDoc(docRef, { partnerCode }, { merge: true });
                         profile = { ...profile, partnerCode };
@@ -447,7 +446,7 @@
                         photoURL: profile.photoURL || user.photoURL || '',
                         partnerCode: profile.partnerCode || ''
                     }));
-                    window.location.href = isAdmin ? "https://admin.mawaseel.ps/" : "partner.html";
+                    window.location.href = "partner.html";
                 } else {
                     currentUser = user;
                     toggleAuthView(null, 'profile-view');
