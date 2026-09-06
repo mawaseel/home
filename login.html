@@ -446,7 +446,16 @@
                         photoURL: profile.photoURL || user.photoURL || '',
                         partnerCode: profile.partnerCode || ''
                     }));
-                    window.location.href = "partner.html";
+                    const isAdmin = profile.role === 'admin' || profile.isAdmin === true;
+                    if (isAdmin) {
+                        window.location.href = "partner.html";
+                    } else if (profile.verificationStatus !== 'approved') {
+                        window.location.href = "verify.html";
+                    } else if (profile.marketerStatus === 'approved') {
+                        window.location.href = "partner.html";
+                    } else {
+                        window.location.href = "trial.html";
+                    }
                 } else {
                     currentUser = user;
                     toggleAuthView(null, 'profile-view');
@@ -541,6 +550,9 @@
                     photoURL: photoURL,
                     partnerCode: makePartnerCode(currentUser.uid),
                     role: "partner",
+                    verificationStatus: "required",
+                    marketerStatus: "unverified",
+                    trialStatus: "not_started",
                     createdAt: new Date().toISOString()
                 });
 
@@ -551,7 +563,7 @@
                     partnerCode: makePartnerCode(currentUser.uid)
                 }));
 
-                window.location.href = "partner.html";
+                window.location.href = "verify.html";
 
             } catch(error) {
                 console.error(error);
