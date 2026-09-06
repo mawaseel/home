@@ -7,7 +7,7 @@ Contains:
 - Partner home hub (partner.html)
 - Content Bank, Learn, PDF Files, Tools, Profile
 
-Dashboard button goes to https://dashboard.mawaseel.ps/
+Control panel button goes to https://mawaseel.github.io/dashboard/
 Admin accounts can use the partner portal too; they are no longer redirected automatically to the admin site.
 
 IMPORTANT: Add all three domains to Firebase Authentication > Authorized domains.
