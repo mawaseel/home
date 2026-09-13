@@ -1,0 +1,6 @@
+MAWASEEL V8.3 TYPOGRAPHY
+=========================
+Font family: Thmanyah Serif Display
+Weight used: Medium (500)
+Loaded at runtime from the @dawod/thmanyah-font-web CDN stylesheet.
+No font binary is bundled in this archive.
