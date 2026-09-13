@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap');
+
+/* Mawaseel 2026 brand refresh — warm beige + soft olive */
+:root{
+  --brand:#748064!important;
+  --brand2:#9aa486!important;
+  --brand-glow:rgba(116,128,100,.18)!important;
+  --bg-main:#F2EFE6!important;
+  --bg-alt:#FBFAF5!important;
+  --bg:#F2EFE6!important;
+  --panel:#FBFAF5!important;
+  --panel2:#EAE7DC!important;
+  --ink:#283026!important;
+  --text-dark:#283026!important;
+  --text-muted:#70766B!important;
+  --muted:#70766B!important;
+  --line-color:rgba(40,48,38,.11)!important;
+  --line:rgba(40,48,38,.11)!important;
+  --soft:rgba(116,128,100,.12)!important;
+  --shadow:0 20px 55px rgba(52,61,48,.08)!important;
+  --font-stack:'Tajawal',sans-serif!important;
+}
+body.dark{
+  --brand:#B5C09A!important;
+  --brand2:#D2C69E!important;
+  --brand-glow:rgba(181,192,154,.13)!important;
+  --bg-main:#171B16!important;
+  --bg-alt:#20251F!important;
+  --bg:#171B16!important;
+  --panel:#20251F!important;
+  --panel2:#272D25!important;
+  --ink:#F1EFE5!important;
+  --text-dark:#F1EFE5!important;
+  --text-muted:#A8AEA2!important;
+  --muted:#A8AEA2!important;
+  --line-color:rgba(241,239,229,.10)!important;
+  --line:rgba(241,239,229,.10)!important;
+  --soft:rgba(181,192,154,.12)!important;
+  --shadow:0 22px 58px rgba(0,0,0,.22)!important;
+}
+html,body,button,input,select,textarea{font-family:'Tajawal',sans-serif!important}
+body{letter-spacing:0!important;background:var(--bg-main,var(--bg))!important}
+body::before{opacity:.018!important}
+body.dark::before{opacity:.014!important}
+
+/* Softer structure */
+.art-header,.site-header{background:color-mix(in srgb,var(--bg-main,var(--bg)) 90%,transparent)!important;border-color:var(--line-color,var(--line))!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(115%)!important}
+body.dark .art-header,body.dark .site-header{background:color-mix(in srgb,var(--bg-main,var(--bg)) 88%,transparent)!important}
+.brand-logo img,.brand img{object-fit:contain!important}
+.nav-links a,.mobile-nav-links a{font-weight:700!important}
+
+.header-join-btn,.mobile-join-btn,.btn-hero-primary,.btn-primary,.btn.brand,.btn.primary{
+  background:linear-gradient(135deg,#69755B,#8D987A)!important;
+  color:#fff!important;
+  box-shadow:0 10px 26px rgba(78,91,69,.15)!important;
+  border:none!important;
+}
+body.dark .header-join-btn,body.dark .mobile-join-btn,body.dark .btn-hero-primary,body.dark .btn-primary,body.dark .btn.brand,body.dark .btn.primary{
+  background:linear-gradient(135deg,#AEBB92,#899775)!important;color:#172016!important;
+}
+.header-join-btn:hover,.mobile-join-btn:hover,.btn-hero-primary:hover,.btn-primary:hover,.btn.brand:hover,.btn.primary:hover{transform:translateY(-2px)!important;filter:brightness(1.025)}
+
+.card,.stat,.resource-row,.profile-chip,.icon-btn,.data-box,.searchbar input,.field input,.form-card,.auth-box,.panel,.feature-card,.pricing-card,.blog-card,.faq-item{
+  border-color:var(--line-color,var(--line))!important;
+  box-shadow:none!important;
+}
+.card,.stat,.form-card,.auth-box,.panel,.feature-card,.pricing-card,.blog-card{border-radius:22px!important}
+.card:hover,.stat:hover,.feature-card:hover,.blog-card:hover{box-shadow:var(--shadow)!important;transform:translateY(-2px)!important}
+.card-icon,.file-icon,.tag,.eyebrow,.card-link,.group-kicker{color:var(--brand)!important}
+.card-icon,.file-icon,.tag,.group-kicker{background:var(--soft)!important}
+
+/* Hero / editorial areas: quieter, warmer */
+.hero-section,.auth-layout{background:var(--bg-main,var(--bg))!important}
+.hero-title,.page-title,.auth-title{font-weight:800!important;letter-spacing:-1.2px!important}
+.hero-desc,.page-desc,.auth-subtitle{font-weight:500!important;line-height:1.8!important}
+.ui-receipt,.ui-card,.floating-card{background:color-mix(in srgb,var(--bg-alt,var(--panel)) 94%,transparent)!important;border-color:var(--line-color,var(--line))!important;box-shadow:0 22px 55px rgba(52,61,48,.09)!important}
+
+/* Replace aggressive black/orange blocks with deep olive */
+.dark-card{background:#30382E!important;color:#F6F3E9!important}
+body.dark .dark-card{background:#C7CDB8!important;color:#20261F!important}
+.result-box{background:var(--soft)!important;color:var(--brand)!important}
+.filter button.active{background:#354034!important;color:#F7F4EA!important;border-color:#354034!important}
+body.dark .filter button.active{background:#C2CBB0!important;color:#1C241B!important;border-color:#C2CBB0!important}
+input:focus,select:focus,textarea:focus{border-color:var(--brand)!important;box-shadow:0 0 0 4px var(--soft)!important;outline:none!important}
+
+/* Footer and small details */
+.footer{border-color:var(--line-color,var(--line))!important}
+::selection{background:rgba(116,128,100,.24)}
+
+.art-footer{background:#30382E!important;color:#F6F3E9!important;border-top:1px solid rgba(255,255,255,.08)!important}
+.art-footer .footer-logo img{filter:none!important}
+.art-footer .footer-col h4{color:#B8C0AF!important}
+.art-footer .footer-col a:hover{color:#D7DEC5!important}
+body.dark .art-footer{background:#121711!important}
