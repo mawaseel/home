@@ -1,5 +1,4 @@
-
-
+@import url('https://cdn.jsdelivr.net/npm/@dawod/thmanyah-font-web/serif-display.css');
 /* Mawaseel 2026 brand refresh — warm beige + soft olive */
 :root{
   --brand:#748064!important;
@@ -18,7 +17,7 @@
   --line:rgba(40,48,38,.11)!important;
   --soft:rgba(116,128,100,.12)!important;
   --shadow:0 20px 55px rgba(52,61,48,.08)!important;
-  --font-stack:'IBM Plex Sans Arabic',sans-serif!important;
+  --font-stack:'Thmanyah Serif Display',serif!important;
 }
 body.dark{
   --brand:#B5C09A!important;
@@ -38,7 +37,7 @@ body.dark{
   --soft:rgba(181,192,154,.12)!important;
   --shadow:0 22px 58px rgba(0,0,0,.22)!important;
 }
-html,body,button,input,select,textarea{font-family:'IBM Plex Sans Arabic',sans-serif!important}
+html,body,button,input,select,textarea{font-family:'Thmanyah Serif Display',serif!important}
 body{letter-spacing:0!important;background:var(--bg-main,var(--bg))!important}
 body::before{opacity:.018!important}
 body.dark::before{opacity:.014!important}
@@ -47,7 +46,7 @@ body.dark::before{opacity:.014!important}
 .art-header,.site-header{background:color-mix(in srgb,var(--bg-main,var(--bg)) 90%,transparent)!important;border-color:var(--line-color,var(--line))!important;box-shadow:none!important;backdrop-filter:blur(20px) saturate(115%)!important}
 body.dark .art-header,body.dark .site-header{background:color-mix(in srgb,var(--bg-main,var(--bg)) 88%,transparent)!important}
 .brand-logo img,.brand img{object-fit:contain!important}
-.nav-links a,.mobile-nav-links a{font-weight:700!important}
+.nav-links a,.mobile-nav-links a{font-weight:400!important}
 
 .header-join-btn,.mobile-join-btn,.btn-hero-primary,.btn-primary,.btn.brand,.btn.primary{
   background:linear-gradient(135deg,#69755B,#8D987A)!important;
@@ -71,8 +70,8 @@ body.dark .header-join-btn,body.dark .mobile-join-btn,body.dark .btn-hero-primar
 
 /* Hero / editorial areas: quieter, warmer */
 .hero-section,.auth-layout{background:var(--bg-main,var(--bg))!important}
-.hero-title,.page-title,.auth-title{font-weight:800!important;letter-spacing:-1.2px!important}
-.hero-desc,.page-desc,.auth-subtitle{font-weight:500!important;line-height:1.8!important}
+.hero-title,.page-title,.auth-title{font-weight:500!important;letter-spacing:0!important}
+.hero-desc,.page-desc,.auth-subtitle{font-weight:400!important;line-height:1.85!important}
 .ui-receipt,.ui-card,.floating-card{background:color-mix(in srgb,var(--bg-alt,var(--panel)) 94%,transparent)!important;border-color:var(--line-color,var(--line))!important;box-shadow:0 22px 55px rgba(52,61,48,.09)!important}
 
 /* Replace aggressive black/orange blocks with deep olive */
@@ -93,24 +92,28 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand)!important;box-
 .art-footer .footer-col a:hover{color:#D7DEC5!important}
 body.dark .art-footer{background:#121711!important}
 
-/* === Mawaseel V8.1 typography refresh: thin, modern Arabic UI === */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
-:root{--font-stack:'IBM Plex Sans Arabic',sans-serif!important;}
+
+/* === Mawaseel V8.3 typography: Thmanyah Serif Display Medium === */
+:root{--font-stack:'Thmanyah Serif Display',serif!important;}
 html,body,button,input,select,textarea{
-  font-family:'IBM Plex Sans Arabic',sans-serif!important;
+  font-family:'Thmanyah Serif Display',serif!important;
+  font-weight:500!important;
   font-synthesis:none;
   text-rendering:optimizeLegibility;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
-body{font-weight:400!important;letter-spacing:0!important;}
-h1,h2,h3,h4,h5,h6,.hero-title,.page-title,.auth-title,.section-title,.brand strong,.visual h2{
-  font-weight:600!important;
+body{letter-spacing:0!important;}
+h1,h2,h3,h4,h5,h6,.hero-title,.page-title,.auth-title,.section-title,.brand strong,.visual h2,
+p,.hero-desc,.page-desc,.auth-subtitle,.card p,.partner-card p,.admin-card p,.onboard-card p,
+strong,b,.stat strong,.money strong,.calc-card strong,
+.nav-links a,.mobile-nav-links a,.back-link,.login-link,.profile-chip span,.footer,.art-footer a,
+button,.btn,.btn-primary,.btn-secondary,.btn-hero-primary,.header-join-btn,.mobile-join-btn,.dock-btn,.section-tab,.card-link,.filter button,.partner-option,.social-btn,#submit,
+label,.eyebrow,.tag,.group-kicker,.status-dot,.selected-partner,.trial-note,.formula-note,.empty,.toast,.brand small{
+  font-family:'Thmanyah Serif Display',serif!important;
+  font-weight:500!important;
   letter-spacing:0!important;
 }
-p,.hero-desc,.page-desc,.auth-subtitle,.card p,.partner-card p,.admin-card p,.onboard-card p{font-weight:400!important;}
-strong,b,.stat strong,.money strong,.calc-card strong{font-weight:600!important;}
-.nav-links a,.mobile-nav-links a,.back-link,.login-link,.profile-chip span,.footer,.art-footer a{font-weight:500!important;}
-button,.btn,.btn-primary,.btn-secondary,.btn-hero-primary,.header-join-btn,.mobile-join-btn,.dock-btn,.section-tab,.card-link,.filter button,.partner-option,.social-btn,#submit{font-weight:600!important;}
-label,.eyebrow,.tag,.group-kicker,.status-dot,.selected-partner,.trial-note,.formula-note,.empty,.toast,.brand small{font-weight:500!important;}
-.hero-title,.page-title,.auth-title{line-height:1.08!important;}
+.hero-title,.page-title,.auth-title{line-height:1.14!important;}
+p,.hero-desc,.page-desc,.auth-subtitle,.card p,.partner-card p,.admin-card p,.onboard-card p{line-height:1.8!important;}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;}
