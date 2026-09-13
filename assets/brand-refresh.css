@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap');
+
 
 /* Mawaseel 2026 brand refresh — warm beige + soft olive */
 :root{
@@ -18,7 +18,7 @@
   --line:rgba(40,48,38,.11)!important;
   --soft:rgba(116,128,100,.12)!important;
   --shadow:0 20px 55px rgba(52,61,48,.08)!important;
-  --font-stack:'Tajawal',sans-serif!important;
+  --font-stack:'IBM Plex Sans Arabic',sans-serif!important;
 }
 body.dark{
   --brand:#B5C09A!important;
@@ -38,7 +38,7 @@ body.dark{
   --soft:rgba(181,192,154,.12)!important;
   --shadow:0 22px 58px rgba(0,0,0,.22)!important;
 }
-html,body,button,input,select,textarea{font-family:'Tajawal',sans-serif!important}
+html,body,button,input,select,textarea{font-family:'IBM Plex Sans Arabic',sans-serif!important}
 body{letter-spacing:0!important;background:var(--bg-main,var(--bg))!important}
 body::before{opacity:.018!important}
 body.dark::before{opacity:.014!important}
@@ -92,3 +92,25 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand)!important;box-
 .art-footer .footer-col h4{color:#B8C0AF!important}
 .art-footer .footer-col a:hover{color:#D7DEC5!important}
 body.dark .art-footer{background:#121711!important}
+
+/* === Mawaseel V8.1 typography refresh: thin, modern Arabic UI === */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+:root{--font-stack:'IBM Plex Sans Arabic',sans-serif!important;}
+html,body,button,input,select,textarea{
+  font-family:'IBM Plex Sans Arabic',sans-serif!important;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+body{font-weight:400!important;letter-spacing:0!important;}
+h1,h2,h3,h4,h5,h6,.hero-title,.page-title,.auth-title,.section-title,.brand strong,.visual h2{
+  font-weight:600!important;
+  letter-spacing:0!important;
+}
+p,.hero-desc,.page-desc,.auth-subtitle,.card p,.partner-card p,.admin-card p,.onboard-card p{font-weight:400!important;}
+strong,b,.stat strong,.money strong,.calc-card strong{font-weight:600!important;}
+.nav-links a,.mobile-nav-links a,.back-link,.login-link,.profile-chip span,.footer,.art-footer a{font-weight:500!important;}
+button,.btn,.btn-primary,.btn-secondary,.btn-hero-primary,.header-join-btn,.mobile-join-btn,.dock-btn,.section-tab,.card-link,.filter button,.partner-option,.social-btn,#submit{font-weight:600!important;}
+label,.eyebrow,.tag,.group-kicker,.status-dot,.selected-partner,.trial-note,.formula-note,.empty,.toast,.brand small{font-weight:500!important;}
+.hero-title,.page-title,.auth-title{line-height:1.08!important;}
