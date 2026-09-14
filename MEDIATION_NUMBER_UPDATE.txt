@@ -1,0 +1,9 @@
+Mawaseel mediation WhatsApp update
+New number: +970566309075
+
+Updated:
+- Visible mediation number on verify.html
+- WhatsApp verification link for message: وثقني
+- wa.me target now uses 970566309075
+
+No other hardcoded occurrence of the previous mediation number was found in this main-site package.
