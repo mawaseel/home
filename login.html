@@ -117,6 +117,11 @@
         }
         .form-control:focus { border-color: var(--brand); outline: none; box-shadow: 0 0 0 4px var(--brand-glow); }
         .form-control::placeholder { color: var(--text-muted); opacity: 0.6; font-weight: 500; }
+        .form-control.invalid { border-color: #b84a4a; box-shadow: 0 0 0 4px rgba(184,74,74,0.09); }
+        .field-error { display: none; margin-top: 7px; color: #a63f3f; font-size: 0.78rem; font-weight: 600; line-height: 1.55; }
+        .field-error.show { display: block; }
+        body.dark .field-error { color: #ff9e9e; }
+        .phone-hint { margin-top: 7px; color: var(--text-muted); font-size: 0.75rem; font-weight: 500; line-height: 1.5; }
         select.form-control { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: left 16px center; background-size: 16px; }
 
         .btn-submit {
@@ -240,11 +245,13 @@
 <div class="form-row">
 <div class="input-group">
 <label class="input-label">الاسم الأول</label>
-<input class="form-control" id="prof-first-name" placeholder="اسمك" required="" type="text"/>
+<input autocomplete="given-name" class="form-control" id="prof-first-name" maxlength="40" placeholder="اسمك بالعربي" required="" type="text"/>
+<div class="field-error" id="prof-first-name-error">الاسم الأول لازم يكون باللغة العربية فقط.</div>
 </div>
 <div class="input-group">
 <label class="input-label">اسم العائلة</label>
-<input class="form-control" id="prof-last-name" placeholder="عيلتك" required="" type="text"/>
+<input autocomplete="family-name" class="form-control" id="prof-last-name" maxlength="40" placeholder="اسم العائلة بالعربي" required="" type="text"/>
+<div class="field-error" id="prof-last-name-error">اسم العائلة لازم يكون باللغة العربية فقط.</div>
 </div>
 </div>
 <!-- Location -->
@@ -270,8 +277,10 @@
 <option value="+970">+970</option>
 <option value="+972">+972</option>
 </select>
-<input class="form-control" id="prof-phone" placeholder="599xxxxxx" required="" style="flex: 1;" type="tel"/>
+<input autocomplete="tel-national" class="form-control" id="prof-phone" inputmode="numeric" maxlength="10" placeholder="059xxxxxxx أو 59xxxxxxx" required="" style="flex: 1;" type="tel"/>
 </div>
+<div class="phone-hint">اكتب الرقم المحلي: 10 خانات ويبدأ بـ 05، أو 9 خانات ويبدأ بـ 5.</div>
+<div class="field-error" id="prof-phone-error">رقم الواتساب لازم يبدأ بـ 05 ويتكون من 10 خانات، أو يبدأ بـ 5 ويتكون من 9 خانات.</div>
 </div>
 <button class="btn-submit" id="profile-btn-text" type="submit">احفظ وافتح حسابي <i class="fa-solid fa-check"></i></button>
 </form>
@@ -374,6 +383,33 @@ function socialAuthMessage(e){
   if(e?.code==='auth/network-request-failed')return 'تعذر الاتصال. تأكد من الإنترنت وجرب مرة ثانية.';
   return 'صارت مشكلة بتسجيل الدخول. جرّب مرة ثانية.';
 }
+const ARABIC_NAME_RE=/^[\u0621-\u063A\u0641-\u064A]+(?:\s+[\u0621-\u063A\u0641-\u064A]+)*$/;
+function toLatinDigits(value){return String(value??'').replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]).replace(/[۰-۹]/g,d=>'0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)])}
+function cleanName(value){return String(value??'').trim().replace(/\s+/g,' ')}
+function validateArabicName(input,errorId){
+  const value=cleanName(input.value),error=document.getElementById(errorId),ok=!!value&&ARABIC_NAME_RE.test(value);
+  input.value=value;input.classList.toggle('invalid',!ok);error?.classList.toggle('show',!ok);return ok;
+}
+function normalizeWhatsappLocal(value){
+  let digits=toLatinDigits(value).replace(/\D/g,'');
+  if(/^05\d{8}$/.test(digits))return {local:digits,international:digits.slice(1)};
+  if(/^5\d{8}$/.test(digits))return {local:digits,international:digits};
+  return null;
+}
+function validateWhatsapp(){
+  const input=document.getElementById('prof-phone'),error=document.getElementById('prof-phone-error'),parsed=normalizeWhatsappLocal(input.value),ok=!!parsed;
+  input.classList.toggle('invalid',!ok);error?.classList.toggle('show',!ok);return parsed;
+}
+function validateProfileIdentity(){
+  const firstOk=validateArabicName(document.getElementById('prof-first-name'),'prof-first-name-error');
+  const lastOk=validateArabicName(document.getElementById('prof-last-name'),'prof-last-name-error');
+  const phone=validateWhatsapp();
+  return firstOk&&lastOk&&phone?phone:null;
+}
+['prof-first-name','prof-last-name'].forEach((id,i)=>{const el=document.getElementById(id);el?.addEventListener('input',()=>{el.classList.remove('invalid');document.getElementById(i?'prof-last-name-error':'prof-first-name-error')?.classList.remove('show')});el?.addEventListener('blur',()=>validateArabicName(el,i?'prof-last-name-error':'prof-first-name-error'))});
+const phoneInput=document.getElementById('prof-phone');
+phoneInput?.addEventListener('input',()=>{phoneInput.value=toLatinDigits(phoneInput.value).replace(/\D/g,'').slice(0,10);phoneInput.classList.remove('invalid');document.getElementById('prof-phone-error')?.classList.remove('show')});
+phoneInput?.addEventListener('blur',validateWhatsapp);
 function prefillProfile(user){
   const parts=String(user?.displayName||'').trim().split(/\s+/).filter(Boolean);
   const first=document.getElementById('prof-first-name'),last=document.getElementById('prof-last-name');
@@ -389,7 +425,7 @@ async function handleSocialLogin(provider,btn){
 }
 ['google-login-btn','google-register-btn'].forEach(id=>document.getElementById(id)?.addEventListener('click',e=>handleSocialLogin(googleProvider,e.currentTarget)));
 ['facebook-login-btn','facebook-register-btn'].forEach(id=>document.getElementById(id)?.addEventListener('click',e=>handleSocialLogin(facebookProvider,e.currentTarget)));
-document.getElementById('profile-form').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser){alert('صارت مشكلة، حاول تسجل من جديد.');return}const btn=document.getElementById('profile-btn-text');btn.innerHTML='جاري الحفظ... <i class="fa-solid fa-spinner fa-spin"></i>';try{let photoURL=currentUser.photoURL||'';const file=document.getElementById('profile-upload').files[0];if(file){if(file.size>2*1024*1024)throw Object.assign(new Error('large'),{code:'image_too_large'});if(!String(file.type||'').startsWith('image/'))throw Object.assign(new Error('type'),{code:'invalid_image'});const imageRef=ref(storage,`profile_pictures/${currentUser.uid}/${Date.now()}`);await uploadBytes(imageRef,file,{contentType:file.type});photoURL=await getDownloadURL(imageRef)}const payload={firstName:document.getElementById('prof-first-name').value,lastName:document.getElementById('prof-last-name').value,region:document.getElementById('prof-region').value,city:document.getElementById('prof-city').value,whatsapp:document.getElementById('prof-prefix').value+document.getElementById('prof-phone').value,photoURL};const r=await apiFetch(currentUser,'/api/profile',{method:'PUT',body:JSON.stringify(payload)});cache(r.profile,currentUser);location.href='verify.html'}catch(error){console.error(error);alert(error.code==='image_too_large'?'الصورة لازم تكون أقل من 2MB.':'صارت مشكلة بحفظ البيانات.')}finally{btn.innerHTML='احفظ وافتح حسابي <i class="fa-solid fa-check"></i>'}});
+document.getElementById('profile-form').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser){alert('صارت مشكلة، حاول تسجل من جديد.');return}const phone=validateProfileIdentity();if(!phone){document.querySelector('.form-control.invalid')?.focus();return}const btn=document.getElementById('profile-btn-text');btn.innerHTML='جاري الحفظ... <i class="fa-solid fa-spinner fa-spin"></i>';try{let photoURL=currentUser.photoURL||'';const file=document.getElementById('profile-upload').files[0];if(file){if(file.size>2*1024*1024)throw Object.assign(new Error('large'),{code:'image_too_large'});if(!String(file.type||'').startsWith('image/'))throw Object.assign(new Error('type'),{code:'invalid_image'});const imageRef=ref(storage,`profile_pictures/${currentUser.uid}/${Date.now()}`);await uploadBytes(imageRef,file,{contentType:file.type});photoURL=await getDownloadURL(imageRef)}const payload={firstName:cleanName(document.getElementById('prof-first-name').value),lastName:cleanName(document.getElementById('prof-last-name').value),region:document.getElementById('prof-region').value,city:document.getElementById('prof-city').value,whatsapp:document.getElementById('prof-prefix').value+phone.international,photoURL};const r=await apiFetch(currentUser,'/api/profile',{method:'PUT',body:JSON.stringify(payload)});cache(r.profile,currentUser);location.href='verify.html'}catch(error){console.error(error);const msg=error.code==='image_too_large'?'الصورة لازم تكون أقل من 2MB.':error.code==='invalid_arabic_name'?'الاسم واسم العائلة لازم يكونوا باللغة العربية فقط.':error.code==='invalid_whatsapp'?'رقم الواتساب غير صحيح. لازم يبدأ بـ 05 (10 خانات) أو 5 (9 خانات).':'صارت مشكلة بحفظ البيانات.';alert(msg)}finally{btn.innerHTML='احفظ وافتح حسابي <i class="fa-solid fa-check"></i>'}});
 
 </script>
 </body>

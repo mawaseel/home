@@ -1,0 +1,12 @@
+Mawaseel V8.7 - Profile validation
+
+Registration profile rules:
+1) First name: Arabic letters only (spaces allowed for compound Arabic names).
+2) Last name: Arabic letters only (spaces allowed for compound Arabic names).
+3) WhatsApp local number must be either:
+   - 10 digits starting with 05, e.g. 0591234567
+   - 9 digits starting with 5, e.g. 591234567
+4) Arabic/Persian-Indic numerals in the phone field are converted to Western digits automatically.
+5) When a 10-digit local number starts with 0, the leading 0 is removed before appending +970/+972, preventing malformed numbers such as +97005...
+6) Client-side validation blocks the form and shows an inline Arabic error.
+7) Backend V8.7 independently enforces the same rules so the checks cannot be bypassed by another site/client.
