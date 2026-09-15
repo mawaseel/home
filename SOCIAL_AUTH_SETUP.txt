@@ -1,0 +1,44 @@
+Mawaseel Social Login V8.6
+==========================
+
+طريقة الدخول المعتمدة في الواجهات:
+- Google
+- Facebook
+
+تمت إزالة حقول تسجيل الدخول/التسجيل بالإيميل وكلمة السر من:
+- mawaseel.com/login.html
+- dashboard.mawaseel.com/login.html
+- admin.mawaseel.com/login.html
+
+مهم: Facebook App Secret لا يوضع في HTML أو GitHub أو Backend source.
+ضع App ID + App Secret فقط داخل Firebase Console:
+Authentication -> Sign-in method -> Facebook
+
+App ID الحالي:
+1457635263092095
+
+بعد تفعيل Facebook في Firebase:
+1) انسخ OAuth redirect URI الظاهر في إعداد Facebook provider.
+   غالباً يكون:
+   https://mawaseel.firebaseapp.com/__/auth/handler
+2) ضعه في Meta Developers -> Facebook Login -> Settings -> Valid OAuth Redirect URIs.
+3) داخل Firebase Authentication -> Settings -> Authorized domains تأكد من وجود:
+   mawaseel.com
+   admin.mawaseel.com
+   dashboard.mawaseel.com
+
+قبل نشر admin/login.html الجديد:
+- في Render أضف متغير البيئة PRIMARY_ADMIN_SOCIAL_EMAILS
+- قيمته الإيميل الحقيقي الذي ستستخدمه في Google أو Facebook للدخول للإدارة.
+- إذا عندك أكثر من إيميل افصل بينهم بفاصلة.
+- اعمل Redeploy للـ Backend.
+
+إدارة الأدمنز بعد V8.6:
+- ما عاد النظام ينشئ username/password للأدمن.
+- الحساب الأساسي يضيف اسم الأدمن + إيميله + الصلاحيات.
+- إذا الإيميل عنده حساب Firebase مسبقاً، يتفعل مباشرة.
+- إذا ما سجل قبل، تنحفظ دعوة. أول ما يسجل بجوجل أو فيسبوك بنفس الإيميل يتفعل كأدمن تلقائياً.
+
+ملاحظة للحسابات القديمة:
+إزالة حقول البريد/كلمة السر من الواجهة لا تحذف حسابات Firebase القديمة.
+لا تعطل Email/Password من Firebase قبل التأكد أن المستخدمين المهمين يقدروا يدخلوا بجوجل أو فيسبوك، وإلا ممكن حساباتهم القديمة تحتاج ربط/ترحيل.

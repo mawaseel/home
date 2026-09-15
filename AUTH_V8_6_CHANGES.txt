@@ -1,0 +1,5 @@
+V8.6 Social Auth
+- Google + Facebook فقط في login.html.
+- تمت إزالة تسجيل الدخول والتسجيل بالإيميل/كلمة السر من الواجهة.
+- FacebookAuthProvider مربوط فعلياً في Firebase client.
+- لا يحتوي الملف على Facebook App Secret.

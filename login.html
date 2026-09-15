@@ -191,23 +191,11 @@
                             كمّل مع جوجل
                         </button>
 <!-- زر فيسبوك تم إرجاعه هنا -->
-<button class="btn-social" onclick="alert('رح نفعل فيسبوك بس نربطه من حساب المطورين')" type="button">
+<button class="btn-social" id="facebook-login-btn" type="button">
 <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 1.25rem;"></i>
                             كمّل مع فيسبوك
                         </button>
 </div>
-<div class="divider">أو باستخدام الإيميل</div>
-<form id="login-form">
-<div class="input-group">
-<label class="input-label">الإيميل تبعك</label>
-<input class="form-control" id="login-email" placeholder="name@example.com" required="" type="email"/>
-</div>
-<div class="input-group">
-<label class="input-label">كلمة السر</label>
-<input class="form-control" id="login-password" placeholder="••••••••" required="" type="password"/>
-</div>
-<button class="btn-submit" id="login-btn-text" type="submit">فوت ع حسابك <i class="fa-solid fa-arrow-left"></i></button>
-</form>
 <div class="auth-switch">
                         ما عندك حساب؟ <a href="#" onclick="toggleAuthView(event, 'register-view')">بلّش شراكتك هسا</a>
 </div>
@@ -224,23 +212,11 @@
                             سجّل مع جوجل
                         </button>
 <!-- زر فيسبوك تم إرجاعه هنا -->
-<button class="btn-social" onclick="alert('رح نفعل فيسبوك بس نربطه من حساب المطورين')" type="button">
+<button class="btn-social" id="facebook-register-btn" type="button">
 <i class="fa-brands fa-facebook" style="color: #1877F2; font-size: 1.25rem;"></i>
                             سجّل مع فيسبوك
                         </button>
 </div>
-<div class="divider">أو سجل بالإيميل</div>
-<form id="register-form">
-<div class="input-group">
-<label class="input-label">الإيميل</label>
-<input class="form-control" id="register-email" placeholder="name@example.com" required="" type="email"/>
-</div>
-<div class="input-group">
-<label class="input-label">كلمة السر</label>
-<input class="form-control" id="register-password" minlength="6" placeholder="أقل شي 6 أحرف" required="" type="password"/>
-</div>
-<button class="btn-submit" id="register-btn-text" type="submit">الخطوة التالية <i class="fa-solid fa-arrow-left"></i></button>
-</form>
 <div class="auth-switch">
                         عندك حساب أصلاً؟ <a href="#" onclick="toggleAuthView(event, 'login-view')">فوت ع حسابك</a>
 </div>
@@ -384,15 +360,35 @@
 <script type="module">
 
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import {getAuth,setPersistence,browserLocalPersistence,createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+import {getAuth,setPersistence,browserLocalPersistence,GoogleAuthProvider,FacebookAuthProvider,signInWithPopup} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
 import {apiFetch} from './api.js';
-const app=initializeApp({apiKey:"AIzaSyBC4KevTkZ_myJZ5kG7LXqAALUVSdLsnHE",authDomain:"mawaseel.firebaseapp.com",projectId:"mawaseel",storageBucket:"mawaseel.firebasestorage.app",messagingSenderId:"877553024815",appId:"1:877553024815:web:bdd1a3c4b352e915e06bda",measurementId:"G-7X5GBYVJ9M"}),auth=getAuth(app),storage=getStorage(app);await setPersistence(auth,browserLocalPersistence);const googleProvider=new GoogleAuthProvider();let currentUser=null;
+const app=initializeApp({apiKey:"AIzaSyBC4KevTkZ_myJZ5kG7LXqAALUVSdLsnHE",authDomain:"mawaseel.firebaseapp.com",projectId:"mawaseel",storageBucket:"mawaseel.firebasestorage.app",messagingSenderId:"877553024815",appId:"1:877553024815:web:bdd1a3c4b352e915e06bda",measurementId:"G-7X5GBYVJ9M"}),auth=getAuth(app),storage=getStorage(app);await setPersistence(auth,browserLocalPersistence);const googleProvider=new GoogleAuthProvider(),facebookProvider=new FacebookAuthProvider();googleProvider.setCustomParameters({prompt:'select_account'});facebookProvider.addScope('email');let currentUser=null;
 function cache(p,u){localStorage.setItem('mawaseel-partner-preview',JSON.stringify({firstName:p?.firstName||u?.displayName?.split(' ')[0]||'',lastName:p?.lastName||'',photoURL:p?.photoURL||u?.photoURL||'',partnerCode:p?.partnerCode||'',email:p?.email||u?.email||'',region:p?.region||'',city:p?.city||'',whatsapp:p?.whatsapp||''}))}
 async function checkAndRouteUser(user){try{const r=await apiFetch(user,'/api/session');if(!r.exists){currentUser=user;toggleAuthView(null,'profile-view');return}const p=r.profile||{};cache(p,user);const admin=p.role==='admin'||p.isAdmin===true;if(admin||p.marketerStatus==='approved')location.href='partner.html';else if(p.verificationStatus==='approved')location.href='trial.html';else location.href='verify.html'}catch(e){console.error(e);alert('تعذر الاتصال بالخادم. جرّب مرة ثانية.')}}
-document.getElementById('register-form').addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('register-btn-text');btn.innerHTML='جاري المعالجة...';try{const c=await createUserWithEmailAndPassword(auth,document.getElementById('register-email').value,document.getElementById('register-password').value);currentUser=c.user;toggleAuthView(null,'profile-view')}catch(error){alert(error.code==='auth/email-already-in-use'?'هذا الإيميل مسجل مسبقاً.':'صارت مشكلة بالتسجيل.')}finally{btn.innerHTML='الخطوة التالية <i class="fa-solid fa-arrow-left"></i>'}});
-document.getElementById('login-form').addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('login-btn-text');btn.innerHTML='لحظة شوي...';try{const c=await signInWithEmailAndPassword(auth,document.getElementById('login-email').value,document.getElementById('login-password').value);await checkAndRouteUser(c.user)}catch(error){alert('الإيميل أو كلمة السر غلط.')}finally{btn.innerHTML='فوت ع حسابك <i class="fa-solid fa-arrow-left"></i>'}});
-async function handleGoogleLogin(){try{const r=await signInWithPopup(auth,googleProvider);await checkAndRouteUser(r.user)}catch(e){console.error(e);alert('صارت مشكلة بتسجيل الدخول.')}}document.getElementById('google-login-btn').addEventListener('click',handleGoogleLogin);document.getElementById('google-register-btn').addEventListener('click',handleGoogleLogin);
+function socialAuthMessage(e){
+  if(e?.code==='auth/popup-closed-by-user')return 'سكرت نافذة تسجيل الدخول قبل ما تكمّل.';
+  if(e?.code==='auth/popup-blocked')return 'المتصفح منع نافذة تسجيل الدخول. اسمح بالنوافذ المنبثقة وجرب مرة ثانية.';
+  if(e?.code==='auth/account-exists-with-different-credential')return 'هذا الإيميل مربوط بطريقة دخول ثانية. جرّب جوجل أو فيسبوك حسب الطريقة اللي استخدمتها أول مرة.';
+  if(e?.code==='auth/operation-not-allowed')return 'طريقة تسجيل الدخول هاي لسا مش مفعّلة من Firebase.';
+  if(e?.code==='auth/network-request-failed')return 'تعذر الاتصال. تأكد من الإنترنت وجرب مرة ثانية.';
+  return 'صارت مشكلة بتسجيل الدخول. جرّب مرة ثانية.';
+}
+function prefillProfile(user){
+  const parts=String(user?.displayName||'').trim().split(/\s+/).filter(Boolean);
+  const first=document.getElementById('prof-first-name'),last=document.getElementById('prof-last-name');
+  if(first&&!first.value&&parts.length)first.value=parts[0];
+  if(last&&!last.value&&parts.length>1)last.value=parts.slice(1).join(' ');
+  if(user?.photoURL&&picPreview&&!picPreview.style.backgroundImage){picPreview.style.backgroundImage=`url(${user.photoURL})`;cameraIcon.style.display='none';picPreview.style.borderStyle='solid';}
+}
+async function handleSocialLogin(provider,btn){
+  const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> لحظة شوي...';
+  try{const r=await signInWithPopup(auth,provider);currentUser=r.user;prefillProfile(r.user);await checkAndRouteUser(r.user)}
+  catch(e){console.error(e);alert(socialAuthMessage(e))}
+  finally{btn.disabled=false;btn.innerHTML=old}
+}
+['google-login-btn','google-register-btn'].forEach(id=>document.getElementById(id)?.addEventListener('click',e=>handleSocialLogin(googleProvider,e.currentTarget)));
+['facebook-login-btn','facebook-register-btn'].forEach(id=>document.getElementById(id)?.addEventListener('click',e=>handleSocialLogin(facebookProvider,e.currentTarget)));
 document.getElementById('profile-form').addEventListener('submit',async e=>{e.preventDefault();if(!currentUser){alert('صارت مشكلة، حاول تسجل من جديد.');return}const btn=document.getElementById('profile-btn-text');btn.innerHTML='جاري الحفظ... <i class="fa-solid fa-spinner fa-spin"></i>';try{let photoURL=currentUser.photoURL||'';const file=document.getElementById('profile-upload').files[0];if(file){if(file.size>2*1024*1024)throw Object.assign(new Error('large'),{code:'image_too_large'});if(!String(file.type||'').startsWith('image/'))throw Object.assign(new Error('type'),{code:'invalid_image'});const imageRef=ref(storage,`profile_pictures/${currentUser.uid}/${Date.now()}`);await uploadBytes(imageRef,file,{contentType:file.type});photoURL=await getDownloadURL(imageRef)}const payload={firstName:document.getElementById('prof-first-name').value,lastName:document.getElementById('prof-last-name').value,region:document.getElementById('prof-region').value,city:document.getElementById('prof-city').value,whatsapp:document.getElementById('prof-prefix').value+document.getElementById('prof-phone').value,photoURL};const r=await apiFetch(currentUser,'/api/profile',{method:'PUT',body:JSON.stringify(payload)});cache(r.profile,currentUser);location.href='verify.html'}catch(error){console.error(error);alert(error.code==='image_too_large'?'الصورة لازم تكون أقل من 2MB.':'صارت مشكلة بحفظ البيانات.')}finally{btn.innerHTML='احفظ وافتح حسابي <i class="fa-solid fa-check"></i>'}});
 
 </script>
