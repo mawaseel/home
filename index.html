@@ -948,6 +948,62 @@
             border: 0;
             display: block;
         }
+        .video-gate-player { position: relative; }
+        .video-fullscreen-btn {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            z-index: 8;
+            border: 0;
+            border-radius: 999px;
+            min-height: 42px;
+            padding: 9px 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(15, 18, 14, .84);
+            color: #fff;
+            font-family: inherit;
+            font-size: .86rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(0,0,0,.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform .2s ease, background .2s ease;
+            touch-action: manipulation;
+        }
+        .video-fullscreen-btn:hover { transform: translateY(-1px); background: rgba(15, 18, 14, .94); }
+        .video-fullscreen-btn i { font-size: .95rem; }
+        .video-gate-player:fullscreen,
+        .video-gate-player:-webkit-full-screen {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-height: none !important;
+            aspect-ratio: auto !important;
+            border-radius: 0 !important;
+            border: 0 !important;
+            background: #000 !important;
+            margin: 0 !important;
+        }
+        .video-gate-player:fullscreen iframe,
+        .video-gate-player:-webkit-full-screen iframe {
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+        .video-gate-player:fullscreen .video-fullscreen-btn,
+        .video-gate-player:-webkit-full-screen .video-fullscreen-btn {
+            left: 16px;
+            bottom: 16px;
+        }
+        @media (max-width: 768px) {
+            .video-fullscreen-btn {
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: .88rem;
+            }
+        }
         .video-watched-box {
             display: flex;
             align-items: center;
@@ -1300,8 +1356,11 @@
 <div class="video-gate-kicker"><i class="fa-brands fa-youtube"></i> قبل ما تبدأ</div>
 <h2 id="video-gate-title">شاهد هذا الفيديو</h2>
 <p class="video-gate-subtitle">بعد مشاهدة هذا الفيديو طبق ما في داخله</p>
-<div class="video-gate-player">
-<iframe id="video-gate-iframe" title="فيديو شرح الشراكة مع مواصيل" src="" data-src="https://www.youtube.com/embed/Lk4VS60WFiU?rel=0&playsinline=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<div class="video-gate-player" id="video-gate-player">
+<iframe id="video-gate-iframe" title="فيديو شرح الشراكة مع مواصيل" src="" data-src="https://www.youtube.com/embed/Lk4VS60WFiU?rel=0&playsinline=1&fs=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+<button class="video-fullscreen-btn" id="video-fullscreen-btn" type="button" aria-label="تكبير الفيديو إلى ملء الشاشة">
+<i class="fa-solid fa-expand"></i><span>ملء الشاشة</span>
+</button>
 </div>
 <label class="video-watched-box" for="video-watched-check">
 <input id="video-watched-check" type="checkbox"/>
@@ -1422,6 +1481,8 @@
         const videoGate = document.getElementById('video-gate');
         const videoGateClose = document.getElementById('video-gate-close');
         const videoGateIframe = document.getElementById('video-gate-iframe');
+        const videoGatePlayer = document.getElementById('video-gate-player');
+        const videoFullscreenBtn = document.getElementById('video-fullscreen-btn');
         const videoWatchedCheck = document.getElementById('video-watched-check');
         const videoGateContinue = document.getElementById('video-gate-continue');
         const registrationLinks = document.querySelectorAll('a[href="login.html?view=register"]');
@@ -1460,9 +1521,58 @@
             });
         });
 
+        async function openVideoFullscreen() {
+            // Android/Chrome/Firefox: make the entire player fullscreen.
+            try {
+                if (videoGatePlayer.requestFullscreen) {
+                    await videoGatePlayer.requestFullscreen();
+                    return;
+                }
+                if (videoGatePlayer.webkitRequestFullscreen) {
+                    videoGatePlayer.webkitRequestFullscreen();
+                    return;
+                }
+                if (videoGateIframe.requestFullscreen) {
+                    await videoGateIframe.requestFullscreen();
+                    return;
+                }
+                if (videoGateIframe.webkitRequestFullscreen) {
+                    videoGateIframe.webkitRequestFullscreen();
+                    return;
+                }
+            } catch (error) {
+                console.warn('Fullscreen API unavailable, using YouTube fallback.', error);
+            }
+
+            // iPhone/iPad and browsers that block iframe fullscreen:
+            // open the same Short directly in YouTube, where fullscreen is available.
+            window.open('https://www.youtube.com/shorts/Lk4VS60WFiU', '_blank', 'noopener,noreferrer');
+        }
+
+        videoFullscreenBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openVideoFullscreen();
+        });
+
         videoWatchedCheck.addEventListener('change', () => {
             videoGateContinue.disabled = !videoWatchedCheck.checked;
         });
+
+        function syncFullscreenButton() {
+            const isFullscreen = document.fullscreenElement === videoGatePlayer || document.webkitFullscreenElement === videoGatePlayer;
+            const icon = videoFullscreenBtn.querySelector('i');
+            const label = videoFullscreenBtn.querySelector('span');
+            if (isFullscreen) {
+                icon.className = 'fa-solid fa-compress';
+                label.textContent = 'تصغير';
+            } else {
+                icon.className = 'fa-solid fa-expand';
+                label.textContent = 'ملء الشاشة';
+            }
+        }
+        document.addEventListener('fullscreenchange', syncFullscreenButton);
+        document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
 
         videoGateContinue.addEventListener('click', () => {
             if (!videoWatchedCheck.checked) return;
