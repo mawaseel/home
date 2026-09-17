@@ -1,0 +1,7 @@
+Mawaseel V8.15 — Trial interface correction
+
+- Trial users no longer enter the normal partner homepage.
+- trial.html is a dedicated trial dashboard with a 48h timer and 0/2 → 2/2 SHEIN order progress.
+- Trial users can use Learn, Files, Tools and Profile.
+- Dashboard links are hidden for trial users and backend/dashboard lock from V8.14 remains active.
+- On service pages, the Home link returns trial users to trial.html.
