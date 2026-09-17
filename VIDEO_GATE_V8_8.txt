@@ -1,0 +1,9 @@
+Mawaseel V8.8 — Registration Video Gate
+
+Homepage registration CTAs no longer go directly to registration.
+They open a modal containing the YouTube Short:
+https://www.youtube.com/shorts/shXLHXZH-IQ
+
+The user must check "شاهدت الفيديو" before the "بلّش شراكتك الآن" button becomes enabled.
+Closing the modal stops video playback.
+Desktop and mobile responsive behavior included.

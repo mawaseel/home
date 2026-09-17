@@ -1,0 +1,1 @@
+V8.13: زر ملء الشاشة أصبح زر تبديل فعلي: ملء الشاشة / تصغير، مع دعم exitFullscreen وwebkitExitFullscreen.

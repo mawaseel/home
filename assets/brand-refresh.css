@@ -117,3 +117,12 @@ label,.eyebrow,.tag,.group-kicker,.status-dot,.selected-partner,.trial-note,.for
 .hero-title,.page-title,.auth-title{line-height:1.14!important;}
 p,.hero-desc,.page-desc,.auth-subtitle,.card p,.partner-card p,.admin-card p,.onboard-card p{line-height:1.8!important;}
 .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;}
+
+/* V8.14 — trial accounts get partner services, but not the dashboard */
+body.trial-access a[href^="https://dashboard.mawaseel.com"]{display:none!important}
+.trial-access-banner{margin:0 0 22px;padding:18px 20px;border:1px solid rgba(116,128,100,.22);border-radius:22px;background:linear-gradient(135deg,rgba(116,128,100,.11),rgba(155,166,135,.08));display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.trial-access-banner strong{display:block;color:var(--text-dark,#283026);font-size:1rem;margin-bottom:4px}
+.trial-access-banner span{color:var(--text-muted,#70756d);font-size:.9rem;line-height:1.7}
+.trial-access-banner a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--brand,#748064);color:#fff!important;font-weight:600;white-space:nowrap}
+body.dark .trial-access-banner{background:rgba(155,166,135,.07);border-color:rgba(255,255,255,.08)}
+@media(max-width:640px){.trial-access-banner{align-items:flex-start}.trial-access-banner a{width:100%;justify-content:center}}

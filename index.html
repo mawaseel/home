@@ -1627,7 +1627,7 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/10.13.0/firebase
 import {getAuth,setPersistence,browserLocalPersistence,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 import {apiFetch} from './api.js';
 const auth=getAuth(initializeApp({apiKey:"AIzaSyBC4KevTkZ_myJZ5kG7LXqAALUVSdLsnHE",authDomain:"mawaseel.firebaseapp.com",projectId:"mawaseel",storageBucket:"mawaseel.firebasestorage.app",messagingSenderId:"877553024815",appId:"1:877553024815:web:bdd1a3c4b352e915e06bda",measurementId:"G-7X5GBYVJ9M"})); await setPersistence(auth,browserLocalPersistence);
-onAuthStateChanged(auth,async user=>{if(!user)return;try{const r=await apiFetch(user,'/api/session');if(!r.exists){location.replace('login.html?view=register');return}const p=r.profile||{},admin=p.role==='admin'||p.isAdmin===true;if(admin||p.marketerStatus==='approved')location.replace('partner.html');else if(p.verificationStatus==='approved')location.replace('trial.html');else location.replace('verify.html')}catch(e){console.error(e)}});
+onAuthStateChanged(auth,async user=>{if(!user)return;try{const r=await apiFetch(user,'/api/session');if(!r.exists){location.replace('login.html?view=register');return}const p=r.profile||{},admin=p.role==='admin'||p.isAdmin===true;if(admin||p.marketerStatus==='approved'||(p.verificationStatus==='approved'&&p.marketerStatus==='trial'))location.replace('partner.html');else if(p.verificationStatus==='approved')location.replace('trial.html');else location.replace('verify.html')}catch(e){console.error(e)}});
 
 </script>
 </body>
